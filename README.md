@@ -1,6 +1,6 @@
 # Hacker News Top Stories for the terminal
 
-This simple script fetches latest top stories from [Hacker News](https://news.ycombinator.com/) and displays them in
+This simple tool fetches latest top stories from [Hacker News](https://news.ycombinator.com/) and displays them in
 the termial's standard output. For example, combined with "cowsay" it looks like:
 
 ![hnfetch](https://raw.githubusercontent.com/candidtim/hnewsfetch/gh-pages/img/hnfetch.png)
@@ -13,15 +13,15 @@ This script is kept simple intentionally and can be simply copied anywhere on th
 It only requires bare bones Python 3 and doesn't depend on any external library. On Linux/MacOS it is recommended to
 grant it an "execution" permission and put into `$PATH`:
 
-    $ wget https://raw.githubusercontent.com/candidtim/hnewsfetch/master/hnfetch.py -O hnfetch
-    $ chmod +x hnfetch
-    $ ./hnfetch
+    $ wget https://raw.githubusercontent.com/candidtim/hnewsfetch/master/hnfetch.py -O hackernews
+    $ chmod +x hackernews
+    $ ./hackernews
 
 Much improved user experience is achieved when combined with [cowsay](https://en.wikipedia.org/wiki/Cowsay):
 
-    $ hnfetch | cowsay -n
+    $ hackernews | cowsay -n
 
-Make sure `-n` option is specified, or cowsay will fail to print the message correctly.
+Make sure `-n` option is specified for cowsay, or cowsay will fail to print the message correctly.
 
 (Hint: cowsay is normally available for any popular Linux distribution. For example, on Debian/Ubuntu install it with
 `sudo apt-get install cowsay`)
@@ -32,19 +32,19 @@ the time it takes to request the REST service to fetch the story.
 
 ### Selecting stories
 
-By default, `hnfetch` will display a random story from current top 10 stories. It is possible to adjust it:
+By default, the tool will display a random story from current top 10 stories. It is possible to adjust it:
 
 Select random story from current top 42:
 
-    $ hnfetch -n 42
+    $ hackernews -n 42
 
 Show only the top story (should work unless someone proves `randint(1,1)` being something different from 1):
 
-    $ hnfetch -n 1
+    $ hackernews -n 1
 
 Select stories from "newest stories" instead or "top stories":
 
-    $ hnfetch --newest
+    $ hackernews --newest
 
 
 ## Why?
