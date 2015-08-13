@@ -30,6 +30,22 @@ I like adding it to my `.bashrc` - this way it shows me one of the latest top st
 window. The obvious drawback however is that this way there is some noticeable delay before the prompt is open, due to
 the time it takes to request the REST service to fetch the story.
 
+### Selecting stories
+
+By default, `hnfetch` will display a random story from current top 10 stories. It is possible to adjust it:
+
+Select random story from current top 42:
+
+    $ hnfetch -n 42
+
+Show only the top story (should work unless someone proves `randint(1,1)` being something different from 1):
+
+    $ hnfetch -n 1
+
+Select stories from "newest stories" instead or "top stories":
+
+    $ hnfetch --newest
+
 
 ## Why?
 

@@ -28,6 +28,8 @@ THE SOFTWARE.
 import sys
 import json
 import codecs
+import argparse
+import random
 from urllib.request import urlopen
 
 
@@ -42,19 +44,30 @@ def get_json(url):
         return json.load(reader(response))
 
 
-def top_stories_ids():
-    return get_json('https://hacker-news.firebaseio.com/v0/topstories.json')
+def stories_ids(stories_type):
+    return get_json('https://hacker-news.firebaseio.com/v0/%(stories_type)sstories.json' % locals())
 
 
 def get_story(story_id):
     return get_json('https://hacker-news.firebaseio.com/v0/item/%d.json' % story_id)
 
 
-def main():
-    top_story_id = top_stories_ids()[0]
-    top_story = get_story(top_story_id)
-    print(STORY_TEMPLATE % top_story)
+def main(args):
+    ids = stories_ids(args.stories_type)
+    selection_size = args.selection_size % len(ids)
+    story_index = random.randint(0, selection_size-1)
+    story_id = ids[story_index]
+    story = get_story(story_id)
+    print(STORY_TEMPLATE % story)
 
 
 if __name__ == "__main__":
-    main()
+    parser = argparse.ArgumentParser(description='Show Hacker News stories in terminal')
+    parser.add_argument('-n', nargs=1, dest='selection_size', action='store', type=int, default=[10],
+                        help='select from N top/newest stories')
+    parser.add_argument('--newest', dest='stories_type', action='store_const', const='new', default='top',
+                        help='show newest stories (default: show top stories)')
+    args = parser.parse_args()
+    args.selection_size = abs(args.selection_size[0])
+    main(args)
+
