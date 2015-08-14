@@ -24,33 +24,49 @@ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 THE SOFTWARE.
 '''
 
-
 import sys
 import json
 import codecs
 import argparse
 import random
-from urllib.request import urlopen
-from urllib.error import URLError
 
+
+# load and use urllib3 if it is available, fallback to urllib otherwise
+try:
+    import urllib3
+    UrlOpenError = urllib3.exceptions.HTTPError
+    use_urllib3 = True
+except ImportError:
+    import urllib
+    UrlOpenError = urllib.error.URLError
+    use_urllib3 = False
+
+
+API_BASE_URL = 'https://hacker-news.firebaseio.com'
+RESPONSE_ENCODING = 'utf-8'
 
 STORY_TEMPLATE = """%(title)s [%(score)d]
 %(url)s
 https://news.ycombinator.com/item?id=%(id)d"""
 
 
-def get_json(url):
-    with urlopen(url) as response:
-        reader = codecs.getreader('utf-8')
-        return json.load(reader(response))
+if use_urllib3:
+    connection = urllib3.connection_from_url(API_BASE_URL)
+    def get_json(request_path):
+        response = connection.request('GET', request_path)
+        return json.loads(response.data.decode(RESPONSE_ENCODING))
+else:
+    def get_json(request_path):
+        with urllib.request.urlopen(API_BASE_URL + request_path) as response:
+            reader = codecs.getreader(RESPONSE_ENCODING)
+            return json.load(reader(response))
 
 
 def stories_ids(stories_type):
-    return get_json('https://hacker-news.firebaseio.com/v0/%(stories_type)sstories.json' % locals())
-
+    return get_json('/v0/%(stories_type)sstories.json' % locals())
 
 def get_story(story_id):
-    return get_json('https://hacker-news.firebaseio.com/v0/item/%d.json' % story_id)
+    return get_json('/v0/item/%d.json' % story_id)
 
 
 def main(args):
@@ -60,8 +76,8 @@ def main(args):
         story_index = random.randint(0, selection_size-1)
         story_id = ids[story_index]
         story = get_story(story_id)
-    except URLError:
-        print("Cannot connect to hacker-news.firebaseio.com")
+    except UrlOpenError:
+        print('Cannot connect to %s' % API_BASE_URL)
     else:
         print(STORY_TEMPLATE % story)
 

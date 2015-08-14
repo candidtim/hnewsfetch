@@ -7,11 +7,12 @@ the termial's standard output. For example, combined with "cowsay" it looks like
 
 Most terminal emulators will let you click on the links, which will take you to the story itself, or the comments.
 
+
 ## How to use
 
 This script is kept simple intentionally and can be simply copied anywhere on the file system and executed with Python.
-It only requires bare bones Python 3 and doesn't depend on any external library. On Linux/MacOS it is recommended to
-grant it an "execution" permission and put into `$PATH`:
+It only requires bare bones Python 3 and doesn't depend on any external library (see 'Speed it up' section below though).
+On Linux/MacOS it is recommended to grant it an "execution" permission and put into `$PATH`:
 
     $ wget https://raw.githubusercontent.com/candidtim/hnewsfetch/master/hnfetch.py -O hackernews
     $ chmod +x hackernews
@@ -27,8 +28,19 @@ Make sure `-n` option is specified for cowsay, or cowsay will fail to print the 
 `sudo apt-get install cowsay`)
 
 I like adding it to my `.bashrc` - this way it shows me one of the latest top stories every time I open new terminal
-window. The obvious drawback however is that this way there is some noticeable delay before the prompt is open, due to
-the time it takes to request the REST service to fetch the story.
+window. The obvious drawback however is that this way there is some delay before the prompt is open, due to the time it
+takes to request the REST service to fetch the story. See next section however!
+
+
+### Speed it up
+
+Note that if `urllib3` is installed and is available for Python, this tool will benefit of it and will be about twice
+as fast. With my internet connection for example, it takes about 800 msec to get the story with `urllib3` installed,
+as opposed to 1300 msec when using Python's standard `urllib`. This small performance improvement might be handy if
+this is used in `.bashrc` for example.
+
+[`urllib3`](https://github.com/shazow/urllib3) is often already installed in most Linux distributions
+
 
 ### Selecting stories
 
