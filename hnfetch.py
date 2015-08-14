@@ -31,6 +31,7 @@ import codecs
 import argparse
 import random
 from urllib.request import urlopen
+from urllib.error import URLError
 
 
 STORY_TEMPLATE = """%(title)s [%(score)d]
@@ -53,12 +54,16 @@ def get_story(story_id):
 
 
 def main(args):
-    ids = stories_ids(args.stories_type)
-    selection_size = args.selection_size % len(ids)
-    story_index = random.randint(0, selection_size-1)
-    story_id = ids[story_index]
-    story = get_story(story_id)
-    print(STORY_TEMPLATE % story)
+    try:
+        ids = stories_ids(args.stories_type)
+        selection_size = args.selection_size % len(ids)
+        story_index = random.randint(0, selection_size-1)
+        story_id = ids[story_index]
+        story = get_story(story_id)
+    except URLError:
+        print("Cannot connect to hacker-news.firebaseio.com")
+    else:
+        print(STORY_TEMPLATE % story)
 
 
 if __name__ == "__main__":
