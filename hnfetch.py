@@ -51,13 +51,13 @@ https://news.ycombinator.com/item?id=%(id)d"""
 
 
 if use_urllib3:
-    connection = urllib3.connection_from_url(API_BASE_URL)
+    connection = urllib3.connection_from_url(API_BASE_URL, timeout=1.0)
     def get_json(request_path):
         response = connection.request('GET', request_path)
         return json.loads(response.data.decode(RESPONSE_ENCODING))
 else:
     def get_json(request_path):
-        with urllib.request.urlopen(API_BASE_URL + request_path) as response:
+        with urllib.request.urlopen(API_BASE_URL + request_path, timeout=1.0) as response:
             reader = codecs.getreader(RESPONSE_ENCODING)
             return json.load(reader(response))
 
