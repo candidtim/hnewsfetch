@@ -1,3 +1,9 @@
+# Archived and replaced by hnwelcome
+
+⚠ This software is no longer maintained and is replaced by https://github.com/candidtim/hnwelcome
+
+---
+
 # Hacker News Top Stories for the terminal
 
 This simple tool fetches latest top stories from [Hacker News](https://news.ycombinator.com/) and displays them in
